@@ -1,0 +1,43 @@
+.selectWrapper {
+    position: relative;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.selectWrapper select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #87CEEB;
+    border-radius: 8px;
+    appearance: none; /* Убирает стандартные стили select */
+    background-color: #6AA6E6;
+    color: white;
+    cursor: pointer;
+}
+
+/* Эффект выпадения списка */
+.selectWrapper:after {
+    content: '\25BC'; /* Символ стрелки вниз */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none; /* Чтобы стрелка не была интерактивной */
+    color: white;
+}
+
+/* При наведении */
+.selectWrapper:hover select {
+    background-color: #1E90FF;
+}
+
+/* При фокусе */
+.selectWrapper select:focus {
+    outline: none; /* Убираем обводку */
+    box-shadow: 0 0 5px #87CEEB; /* Добавляем тень */
+}
+
+.selectWrapper select option:hover {
+    background-color: #E0FFFF; /* Светлее фон при наведении */
+}
