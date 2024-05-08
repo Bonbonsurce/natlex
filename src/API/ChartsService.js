@@ -28,7 +28,9 @@ export default class ChartsService {
                 const randomIndex = Math.floor(Math.random() * colors.length);
                 series.push({ data: lineData, color: colors[randomIndex], area: true });
             }
-            charts.push({ xAxis, series, chartDate});
+
+            let strDate = chartDate.toISOString();
+            charts.push({ xAxis, series, strDate});
         }
         return charts;
     }

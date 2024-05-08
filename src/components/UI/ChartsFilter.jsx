@@ -9,8 +9,8 @@ const ChartsFilter = ({filter, setFilter}) => {
                 onChange={selectedSort => setFilter({...filter, sort: selectedSort})}
                 defaultValue="Sort"
                 options={[
-                    {value: 'newest', name: 'By date (newest)'},
-                    {value: 'oldest', name: 'By date (oldest)'}
+                    {value: 'newest', name: 'By date (to newest)'},
+                    {value: 'oldest', name: 'By date (to oldest)'}
                 ]}
             />
         </div>
