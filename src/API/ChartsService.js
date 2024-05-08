@@ -18,7 +18,7 @@ export default class ChartsService {
             const chartDate = datesWithTime[Math.floor(Math.random() * datesWithTime.length)];
             const series = [];
             const numLines = Math.floor(Math.random() * 3) + 1;
-            const colors = ['#FFB6C1', '#87CEFA', '#FFD700', '#98FB98', '#FFA07A'];
+            const colors = ['#FFB6C1', '#87CEFA', '#ffe975', '#98FB98', '#FFA07A'];
 
             for (let j = 0; j < numLines; j++) {
                 const lineData = [];
