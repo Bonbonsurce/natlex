@@ -1,11 +1,10 @@
 import React from 'react';
+import cl from './MyInput.css';
 
-const MyInput = () => {
+const MyInput = React.forwardRef(({ id, ...props }, ref) => {
     return (
-        <div>
-            
-        </div>
+        <input ref={ref} id={id} {...props} className="myInput"/>
     );
-};
+});
 
 export default MyInput;

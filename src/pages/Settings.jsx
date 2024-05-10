@@ -64,7 +64,7 @@ const Settings = () => {
                 <div className="btnCreateChart">
                     <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
                     <MyModal visible={modal} setVisible={setModal}>
-                        <ChartForm create={createChart}/>
+                        <ChartForm create={createChart} chartsCount={charts.length}/>
                     </MyModal>
                 </div>
             }

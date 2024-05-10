@@ -49,14 +49,12 @@
 }
 
 .chart {
-    .post {
-        display: flex;
-        padding: 15px;
-        border: 2px solid #87CEEB;
-        margin-top: 15px;
-        justify-content: space-between;
-        align-items: center;
-    }
+    display: flex;
+    padding: 15px;
+    border: 2px solid #87CEEB;
+    margin-top: 15px;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .nav__link {
