@@ -3,7 +3,7 @@ import cl from './MyButton.css'
 
 const MyButton = ({children, ...props}) => {
     return (
-        <button {...props} className={cl.myBtn}>
+        <button {...props} className="myBtn">
             {children}
         </button>
     );

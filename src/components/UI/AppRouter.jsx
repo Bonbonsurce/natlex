@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {publicRoutes} from "../../router/routes";
+import {SettingsContext} from "../../context/context";
 
 const AppRouter = () => {
+    const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
+
     return (
         <Routes>
             {publicRoutes.map(route=>

@@ -1,7 +1,17 @@
 .myBtn {
-    padding: 5px 15px;
-    color: white;
-    font-size: 14px;
-    background: #1E90FF;
+    display: inline-block;
+    padding: 0.5em 1em;
     border: 1px solid #87CEEB;
+    border-radius: 8px;
+    background-color: #6AA6E6;
+    color: white;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    width: 120px;
+    cursor: pointer; /* добавим указатель мыши, чтобы кнопка выглядела кликабельной */
+}
+
+/* Стиль при наведении курсора */
+.myBtn:hover {
+    background-color: #87CEEB;
 }

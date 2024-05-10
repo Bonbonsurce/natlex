@@ -27,28 +27,41 @@ const Charts = () => {
 
     const sortedCharts = useCharts(chartsStat, filter.sort);
 
-    const createPost = (newChart) => {
-        setCharts([...charts, newChart])
-        setModal(false)
-    }
+    // const createChart = (newChart) => {
+    //     setCharts([...charts, newChart])
+    //     setModal(false)
+    // }
 
     useEffect(() => {
         fetchCharts()
     }, []);
 
-    const removeChart = (chart) => {
-        setCharts(charts.filter(p => p.id !== chart.id))
-    }
+    // const removeChart = (chart) => {
+    //     setCharts(charts.filter(c => c.id !== chart.id))
+    // }
 
     return (
         <div className="center__items">
-            <div className="items__left__side">
-                <ChartsFilter
-                    filter={filter}
-                    setFilter={setFilter}
-                />
-            </div>
-            <ChartList style={{paddingTop: 50}} charts={sortedCharts} title='Charts'/>
+
+            {sortedCharts.length === 0 ? (
+                    <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts do not exist</h1>
+                ) : (
+                    <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
+            )}
+
+            {sortedCharts.length === 0 ? (
+                <h1 style={{textAlign: 'center'}}>
+                    Charts don't exist
+                </h1>
+            ) : (
+                <div className="items__left__side">
+                    <ChartsFilter
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
+                    <ChartList style={{paddingTop: 50}} charts={sortedCharts} title='Charts'/>
+                </div>
+            )}
         </div>
     );
 };

@@ -29,6 +29,7 @@
 .chart-content {
     border: 2px solid #87CEEB;
     margin-bottom: 30px;
+    z-index: 1;
 }
 
 .navbar {
@@ -38,6 +39,24 @@
     margin-left: 50px;
     margin-right: 50px;
     padding: 1.2em;
+}
+
+.btnCreateChart {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    width: 600px;
+}
+
+.chart {
+    .post {
+        display: flex;
+        padding: 15px;
+        border: 2px solid #87CEEB;
+        margin-top: 15px;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 
 .nav__link {

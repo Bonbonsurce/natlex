@@ -9,6 +9,8 @@ export default class ChartsService {
             new Date('2023-08-20T09:10:00')
         ];
 
+        const chartsTitles = ['Chart 1', 'Chart 2', 'Chart 3'];
+
         for (let i = 0; i < numCharts; i++) {
             const xAxisLength = Math.floor(Math.random() * 6) + 5;
             const xAxisData = Array.from({ length: xAxisLength }, (_, index) => Math.random() * 10);
@@ -29,8 +31,10 @@ export default class ChartsService {
                 series.push({ data: lineData, color: colors[randomIndex], area: true });
             }
 
+            let chartTitle = chartsTitles[Math.floor(Math.random() * chartsTitles.length)];
             let strDate = chartDate.toISOString();
-            charts.push({ xAxis, series, strDate});
+            let id = i + 1;
+            charts.push({id, xAxis, series, strDate, chartTitle});
         }
         return charts;
     }

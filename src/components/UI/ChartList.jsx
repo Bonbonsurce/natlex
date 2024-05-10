@@ -1,33 +1,25 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import ChartItem from "./ChartItem";
+import {SettingsContext} from "../../context/context";
+import MyButton from "./button/MyButton";
+import ChartForm from "../ChartForm";
+import MyModal from "./MyModal/MyModal";
 
-const ChartList = ({charts, title}) => {
-
-    if (!charts.length) {
-        return (
-            <h1 style={{textAlign: 'center'}}>
-                Charts don't exist
-            </h1>
-        )
-    }
+const ChartList = ({charts, title, remove, change}) => {
+    const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
 
     return (
         <div>
-            <h1 style={{textAlign: 'center', marginBottom: 30}}>
-                {title}
-            </h1>
-
             <hr style={{margin: '15px 0', border: 'none', borderTop: '2px solid #87CEEB'}}/>
-
             <TransitionGroup>
                 {charts.map((chart, index) =>
                     <CSSTransition
                         key={index}
                         timeout={500}
-                        classNames="post"
+                        classNames="chart"
                     >
-                        <ChartItem chart={chart}/>
+                        <ChartItem change={change} remove={remove} number={index + 1} chart={chart}/>
                     </CSSTransition>
                 )}
             </TransitionGroup>
