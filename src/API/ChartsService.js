@@ -13,7 +13,7 @@ export default class ChartsService {
 
         for (let i = 0; i < numCharts; i++) {
             const xAxisLength = Math.floor(Math.random() * 6) + 5;
-            const xAxisData = Array.from({ length: xAxisLength }, (_, index) => Math.random() * 10);
+            const xAxisData = Array.from({ length: xAxisLength }, (_, index) => (Math.random() * 10).toFixed(2));
             xAxisData.sort((a, b) => a - b); // Сортировка массива в порядке возрастания
             const xAxis = [{ data: xAxisData }];
 
@@ -25,7 +25,7 @@ export default class ChartsService {
             for (let j = 0; j < numLines; j++) {
                 const lineData = [];
                 for (let k = 0; k < xAxisLength; k++) {
-                    lineData.push(Math.random() * 10);
+                    lineData.push((Math.random() * 10).toFixed(2));
                 }
                 const randomIndex = Math.floor(Math.random() * colors.length);
                 series.push({ data: lineData, color: colors[randomIndex], area: true });

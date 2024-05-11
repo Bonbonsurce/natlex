@@ -48,8 +48,19 @@ const Settings = () => {
         setCharts(charts => charts.filter(c => c.id !== chart.id));
     };
 
-    const changeChart = (chart) => {
-
+    const editChart = (chart, newChart) => {
+        // Создаем новый массив графиков, в котором заменяем текущий график на новый
+        const updatedCharts = charts.map(existingChart => {
+            // Если id текущего графика совпадает с id редактируемого графика, заменяем его
+            if (existingChart.id === chart.id) {
+                return newChart; // Возвращаем новый график
+            } else {
+                return existingChart; // Возвращаем неизмененный текущий график
+            }
+        });
+        // Обновляем состояние charts новым массивом графиков
+        setCharts(updatedCharts);
+        setModal(false);
     }
 
     return (
@@ -64,12 +75,12 @@ const Settings = () => {
                 <div className="btnCreateChart">
                     <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
                     <MyModal visible={modal} setVisible={setModal}>
-                        <ChartForm create={createChart} chartsCount={charts.length}/>
+                        <ChartForm create={createChart} edit={editChart} chartsCount={charts.length}/>
                     </MyModal>
                 </div>
             }
 
-            <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart} change={changeChart}/>
+            <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart} edit={editChart}/>
         </div>
     );
 };

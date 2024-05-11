@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MyButton from "./UI/button/MyButton";
 import MyInput from "./UI/input/MyInput";
 import MySelect from "./UI/select/MySelect";
 
-const ChartForm = ({create, chartsCount}) => {
+const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     const [chart, setChart] = useState({
         id: null,
         xAxis: [],
@@ -12,17 +12,30 @@ const ChartForm = ({create, chartsCount}) => {
         chartTitle: ''
     });
     const [lineNow, setLineNow] = useState(1);
-    const [selectedColor, setSelectedColor] = useState('');
+    const [seriesData, setSeriesData] = useState(Array(lineNow).fill(''));
+    const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill(''));
+    const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(false));
+    const [chartTitle, setChartTitle] = useState('');
+    const [chartAxis, setChartAxis] = useState([]);
+    const [saveButtonText, setSaveButtonText] = useState('Create');
 
-    const handleColorChange = (selectedColor, index) => {
-        setChart(prevChart => {
-            const updatedSeries = [...prevChart.series];
-            updatedSeries[index] = { ...updatedSeries[index], color: selectedColor };
-            console.log('This is info', index, selectedColor);
-            return { ...prevChart, series: updatedSeries };
-        });
-        console.log(selectedColor);
-    };
+    useEffect(() => {
+        if (editChart) {
+            setChart({
+                id: editChart.id,
+                xAxis: [{ data: editChart.xAxis }],
+                series: editChart.series,
+                strDate: editChart.strDate,
+                chartTitle: editChart.chartTitle
+            });
+            setChartTitle(editChart.chartTitle);
+            setChartAxis(editChart.xAxis.length > 0 ? editChart.xAxis[0].data.join(',') : '');
+            setSeriesData(editChart.series.map(serie => serie.data.join(',')));
+            setSeriesColor(editChart.series.map(serie => serie.color));
+            setSeriesArea(editChart.series.map(serie => serie.area));
+            setSaveButtonText('Save changes');
+        }
+    }, [editChart]);
 
     const addNewLine = (e) => {
         e.preventDefault();
@@ -38,24 +51,19 @@ const ChartForm = ({create, chartsCount}) => {
         }
     };
 
-    const [seriesData, setSeriesData] = useState(Array(lineNow).fill(''));
-    const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill(''));
-    const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(''));
-    const [chartTitle, setChartTitle] = useState('');
-    const [chartAxis, setChartAxis] = useState([]);
-
     const addNewChart = (e) => {
         e.preventDefault()
         const chartId = chartsCount + 1;
-        const chartAxisData = document.getElementById('chartAxis').value.split(',').map(parseFloat);
-        const chartTitle = document.getElementById('chartTitle').value;
+        //const chartAxisData = document.getElementById('chartAxis').value.split(',').map(parseFloat);
+        const chartAxisData = chartAxis.split(',').map(parseFloat);
+        //const chartTitle = document.getElementById('chartTitle').value;
         const currentDate = new Date();
         const chartDate = currentDate.toISOString();
 
         const series = Array.from({ length: lineNow }).map((_, index) => ({
             data: seriesData[index].split(',').map(parseFloat),
             color: seriesColor[index],
-            area: seriesArea[index]
+            area: Boolean(seriesArea[index])
         }));
 
         const newChart = {
@@ -66,14 +74,26 @@ const ChartForm = ({create, chartsCount}) => {
             chartTitle: chartTitle
         };
 
-        create(newChart);
-        setChart({
-            id: null,
-            xAxis: [],
-            series: [{data:[], color:'', area:false}],
-            strDate: '',
-            chartTitle: ''
-        });
+        if (editChart) {
+            edit(editChart, newChart);
+            setChart({
+                id: null,
+                xAxis: [],
+                series: [{data:[], color:'', area:false}],
+                strDate: '',
+                chartTitle: ''
+            });
+            hideModal();
+        } else {
+            create(newChart);
+            setChart({
+                id: null,
+                xAxis: [],
+                series: [{data:[], color:'', area:false}],
+                strDate: '',
+                chartTitle: ''
+            });
+        }
     };
 
     function handleKeyDown(event) {
@@ -88,7 +108,9 @@ const ChartForm = ({create, chartsCount}) => {
         <form>
             <MyInput
                 value={chartTitle}
-                onChange={(e) => setChartTitle(e.target.value)}
+                onChange={(e) => {
+                    setChartTitle(e.target.value);
+                }}
                 id="chartTitle"
                 type="text"
                 placeholder="Chart Title"
@@ -155,7 +177,7 @@ const ChartForm = ({create, chartsCount}) => {
                     <MyButton onClick={deleteLine}>Delete line</MyButton>
                 </div>
             ))}
-            <MyButton onClick={addNewChart}>Create</MyButton>
+            <MyButton onClick={addNewChart}>{saveButtonText}</MyButton>
         </form>
     );
 };

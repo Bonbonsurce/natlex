@@ -1,17 +1,36 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {LineChart} from "@mui/x-charts/LineChart";
 import charts from "../../pages/Charts";
 import {SettingsContext} from "../../context/context";
 import MySelect from "./select/MySelect";
 import MyButton from "./button/MyButton";
+import MyModal from "./MyModal/MyModal";
+import ChartForm from "../ChartForm";
 
 const ChartItem = (props) => {
     const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
     const strDate = props.chart.strDate.slice(0, 10);
+    const [modal, setModal] = useState(false);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+    const showEditModal = () => {
+        setEditModalVisible(true);
+    };
+
+    const showDeleteModal = () => {
+        setDeleteModalVisible(true);
+    };
+
+    const hideModals = () => {
+        setEditModalVisible(false);
+        setDeleteModalVisible(false);
+    };
 
     const deleteChart = (event) => {
         event.preventDefault(); // Предотвращаем действие по умолчанию для кнопки
         props.remove(props.chart);
+        hideModals();
     };
 
     return (
@@ -26,10 +45,25 @@ const ChartItem = (props) => {
             />
             {isSettings &&
                 <div className="navbar">
-                    <MyButton>Edit</MyButton>
-                    <MyButton onClick={deleteChart}>
-                        Delete
-                    </MyButton>
+                    <div>
+                        <MyButton onClick={showEditModal}>Edit</MyButton>
+                        <MyModal visible={editModalVisible} setVisible={setEditModalVisible}>
+                            <ChartForm edit={props.edit} chartsCount={charts.length} editChart={props.chart} hideModal={hideModals}/>
+                        </MyModal>
+                    </div>
+
+                    <div>
+                        <MyButton onClick={showDeleteModal}>Delete</MyButton>
+                        <MyModal visible={deleteModalVisible} setVisible={setDeleteModalVisible}>
+                            <h5>Are you sure that you want to delete this chart?</h5>
+                            <MyButton onClick={deleteChart}>Delete</MyButton>
+                        </MyModal>
+                    </div>
+
+                    {/*<MyButton>Edit</MyButton>*/}
+                    {/*<MyButton onClick={deleteChart}>*/}
+                    {/*    Delete*/}
+                    {/*</MyButton>*/}
                 </div>
             }
         </div>

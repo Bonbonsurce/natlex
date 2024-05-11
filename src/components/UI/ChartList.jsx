@@ -6,7 +6,7 @@ import MyButton from "./button/MyButton";
 import ChartForm from "../ChartForm";
 import MyModal from "./MyModal/MyModal";
 
-const ChartList = ({charts, title, remove, change}) => {
+const ChartList = ({charts, title, remove, edit}) => {
     const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
 
     return (
@@ -19,7 +19,7 @@ const ChartList = ({charts, title, remove, change}) => {
                         timeout={500}
                         classNames="chart"
                     >
-                        <ChartItem change={change} remove={remove} number={index + 1} chart={chart}/>
+                        <ChartItem edit={edit} remove={remove} number={index + 1} chart={chart}/>
                     </CSSTransition>
                 )}
             </TransitionGroup>

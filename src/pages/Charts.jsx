@@ -54,11 +54,13 @@ const Charts = () => {
                     Charts don't exist
                 </h1>
             ) : (
-                <div className="items__left__side">
-                    <ChartsFilter
-                        filter={filter}
-                        setFilter={setFilter}
-                    />
+                <div>
+                    <div className="items__left__side">
+                        <ChartsFilter
+                            filter={filter}
+                            setFilter={setFilter}
+                        />
+                    </div>
                     <ChartList style={{paddingTop: 50}} charts={sortedCharts} title='Charts'/>
                 </div>
             )}
