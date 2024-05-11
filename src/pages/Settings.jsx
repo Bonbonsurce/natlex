@@ -13,7 +13,7 @@ const Settings = () => {
     const [charts, setCharts] = useState([]);
     const [filter, setFilter] = useState({sort: ''});
     const [modal, setModal] = useState(false);
-    const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
+    const {isSettings, setIsSettings, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
 
     const [totalPages, setTotalPages] = useState(0);
     const [limit, setLimit] = useState(10);
@@ -29,14 +29,16 @@ const Settings = () => {
 
     useEffect(() => {
         // Заполняем состояние charts при монтировании компонента
-        const initialCharts = ChartsService.generateCharts(10);
-        setCharts(initialCharts);
+        // const initialCharts = ChartsService.generateCharts(10);
+        // setCharts(initialCharts);
+        setCharts(chartsStat);
     }, []);
 
     const sortedCharts = useCharts(charts, filter.sort);
 
     const createChart = (newChart) => {
-        setCharts([...charts, newChart]);
+        //setCharts([...charts, newChart]);
+        setChartsStat([...chartsStat, newChart]);
         setModal(false);
     }
 
@@ -46,6 +48,7 @@ const Settings = () => {
 
     const removeChart = (chart) => {
         setCharts(charts => charts.filter(c => c.id !== chart.id));
+        setChartsStat(chartsStat => chartsStat.filter(c => c.id !== chart.id));
     };
 
     const editChart = (chart, newChart) => {
@@ -75,12 +78,17 @@ const Settings = () => {
                 <div className="btnCreateChart">
                     <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
                     <MyModal visible={modal} setVisible={setModal}>
-                        <ChartForm create={createChart} edit={editChart} chartsCount={charts.length}/>
+                        <ChartForm create={createChart} edit={editChart} chartsCount={chartsStat.length}/>
                     </MyModal>
                 </div>
             }
 
-            <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart} edit={editChart}/>
+            <ChartList style={{paddingTop: 50}} charts={chartsStat} title='Charts' remove={removeChart} edit={editChart}/>
+            {isSettings &&
+                <div className="btnCreateChart">
+                    <MyButton>Save</MyButton>
+                </div>
+            }
         </div>
     );
 };

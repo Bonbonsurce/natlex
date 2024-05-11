@@ -4,7 +4,7 @@ import {publicRoutes} from "../../router/routes";
 import {SettingsContext} from "../../context/context";
 
 const AppRouter = () => {
-    const {isSettings, setIsSettings, setIsLoading} = useContext(SettingsContext);
+    const {isSettings, setIsSettings, setIsLoading, chartsStat} = useContext(SettingsContext);
 
     return (
         <Routes>

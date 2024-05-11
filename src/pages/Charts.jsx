@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
 import { Line } from 'react-chartjs-2';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
@@ -7,6 +7,7 @@ import ChartList from "../components/UI/ChartList";
 import ChartsFilter from "../components/UI/ChartsFilter";
 import {useCharts} from "../hooks/useCharts";
 import {useFetching} from "../hooks/useFetching";
+import {SettingsContext} from "../context/context";
 
 const Charts = () => {
     const [charts, setCharts] = useState([]);
@@ -18,12 +19,13 @@ const Charts = () => {
     const [page, setPage] = useState(1);
     const lastElement = useRef();
 
-    const chartsStat = ChartsService.generateCharts(10);
+    const {isSettings, setIsSettings, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
+    //const chartsStat = ChartsService.generateCharts(10);
 
-    const [fetchCharts, isChartLoading, chartError] = useFetching( () => {
-        const chartsStat = ChartsService.generateCharts(10);
-        setCharts([...charts, chartsStat]);
-    })
+    // const [fetchCharts, isChartLoading, chartError] = useFetching( () => {
+    //     const chartsStat = ChartsService.generateCharts(10);
+    //     setCharts([...charts, chartsStat]);
+    // })
 
     const sortedCharts = useCharts(chartsStat, filter.sort);
 
@@ -32,9 +34,9 @@ const Charts = () => {
     //     setModal(false)
     // }
 
-    useEffect(() => {
-        fetchCharts()
-    }, []);
+    // useEffect(() => {
+    //     fetchCharts()
+    // }, []);
 
     // const removeChart = (chart) => {
     //     setCharts(charts.filter(c => c.id !== chart.id))
@@ -43,11 +45,9 @@ const Charts = () => {
     return (
         <div className="center__items">
 
-            {sortedCharts.length === 0 ? (
-                    <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts do not exist</h1>
-                ) : (
-                    <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
-            )}
+            {sortedCharts.length > 0 &&
+                <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
+            }
 
             {sortedCharts.length === 0 ? (
                 <h1 style={{textAlign: 'center'}}>
