@@ -55,8 +55,10 @@ const ChartItem = (props) => {
                     <div>
                         <MyButton onClick={showDeleteModal}>Delete</MyButton>
                         <MyModal visible={deleteModalVisible} setVisible={setDeleteModalVisible}>
-                            <h5>Are you sure that you want to delete this chart?</h5>
-                            <MyButton onClick={deleteChart}>Delete</MyButton>
+                            <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', padding:10}}>
+                                <h5 style={{marginBottom:25}}>Are you sure that you want to delete this chart?</h5>
+                                <MyButton onClick={deleteChart}>Delete</MyButton>
+                            </div>
                         </MyModal>
                     </div>
 

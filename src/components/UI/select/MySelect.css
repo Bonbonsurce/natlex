@@ -12,7 +12,7 @@
     border: 1px solid #87CEEB;
     border-radius: 8px;
     appearance: none; /* Убирает стандартные стили select */
-    background-color: #6AA6E6;
+    background-color: #6495ED;
     color: white;
     cursor: pointer;
 }

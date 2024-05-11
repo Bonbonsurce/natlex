@@ -14,7 +14,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     const [lineNow, setLineNow] = useState(1);
     const [seriesData, setSeriesData] = useState(Array(lineNow).fill(''));
     const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill(''));
-    const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(false));
+    const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(''));
     const [chartTitle, setChartTitle] = useState('');
     const [chartAxis, setChartAxis] = useState([]);
     const [saveButtonText, setSaveButtonText] = useState('Create');
@@ -33,13 +33,14 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
             setSeriesData(editChart.series.map(serie => serie.data.join(',')));
             setSeriesColor(editChart.series.map(serie => serie.color));
             setSeriesArea(editChart.series.map(serie => serie.area));
+            setLineNow(editChart.series.length);
             setSaveButtonText('Save changes');
         }
     }, [editChart]);
 
     const addNewLine = (e) => {
         e.preventDefault();
-        if (lineNow < 2) {
+        if (lineNow < 3) {
             setLineNow(prevLineNow => prevLineNow + 1);
         }
     };
@@ -53,46 +54,76 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
 
     const addNewChart = (e) => {
         e.preventDefault()
+        if (!chartTitle || !chartAxis.length || seriesData.some(data => !data)) {
+            console.log('Поля не заполнены', chartAxis.length, '--',chartTitle);
+            return;
+        }
+
         const chartId = chartsCount + 1;
-        //const chartAxisData = document.getElementById('chartAxis').value.split(',').map(parseFloat);
         const chartAxisData = chartAxis.split(',').map(parseFloat);
-        //const chartTitle = document.getElementById('chartTitle').value;
         const currentDate = new Date();
         const chartDate = currentDate.toISOString();
+        let invalidData = false;
 
-        const series = Array.from({ length: lineNow }).map((_, index) => ({
-            data: seriesData[index].split(',').map(parseFloat),
-            color: seriesColor[index],
-            area: Boolean(seriesArea[index])
-        }));
+        Array.from({ length: lineNow }).forEach((_, index) => {
+            if (!seriesData[index]) {
+                console.log('Data undefined');
+                invalidData = true;
+                return;
+            }
 
-        const newChart = {
-            id: chartId,
-            xAxis: [{ data: chartAxisData }],
-            series: series,
-            strDate: chartDate,
-            chartTitle: chartTitle
-        };
+            const data = seriesData[index].split(',').map(parseFloat);
 
-        if (editChart) {
-            edit(editChart, newChart);
-            setChart({
-                id: null,
-                xAxis: [],
-                series: [{data:[], color:'', area:false}],
-                strDate: '',
-                chartTitle: ''
-            });
-            hideModal();
-        } else {
-            create(newChart);
-            setChart({
-                id: null,
-                xAxis: [],
-                series: [{data:[], color:'', area:false}],
-                strDate: '',
-                chartTitle: ''
-            });
+            if (data.length !== chartAxisData.length) {
+                console.log('Not correct data!')
+                invalidData = true;
+            }
+        });
+
+        if (invalidData) {return;}
+        else {
+            if(seriesArea[0] === 'false'){
+                console.log("dsds");
+            }
+            const series = Array.from({ length: lineNow }).map((_, index) => ({
+                data: seriesData[index].split(',').map(parseFloat),
+                color: seriesColor[index],
+                area: seriesArea[index]
+            }));
+
+            const newChart = {
+                id: chartId,
+                xAxis: [{ data: chartAxisData }],
+                series: series,
+                strDate: chartDate,
+                chartTitle: chartTitle
+            };
+
+            if (editChart) {
+                edit(editChart, newChart);
+                setChart({
+                    id: null,
+                    xAxis: [],
+                    series: [{data:[], color:'', area:false}],
+                    strDate: '',
+                    chartTitle: ''
+                });
+                hideModal();
+            } else {
+                create(newChart);
+                setChartTitle('');
+                setChartAxis('');
+                setSeriesData(Array(lineNow).fill(''));
+                setLineNow(1);
+
+                setChart({
+                    id: null,
+                    xAxis: [],
+                    series: [{data:[], color:'', area:false}],
+                    strDate: '',
+                    chartTitle: ''
+                });
+            }
         }
     };
 
@@ -105,80 +136,87 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     }
 
     return (
-        <form>
-            <MyInput
-                value={chartTitle}
-                onChange={(e) => {
-                    setChartTitle(e.target.value);
-                }}
-                id="chartTitle"
-                type="text"
-                placeholder="Chart Title"
-            />
+        <div style={{ padding: '20px', backgroundColor: '#f0f5ff', borderRadius: '10px', maxHeight: '500px', overflowY: 'auto' }}>
+            <form>
+                <MyInput
+                    value={chartTitle}
+                    onChange={(e) => {
+                        setChartTitle(e.target.value);
+                    }}
+                    id="chartTitle"
+                    type="text"
+                    placeholder="Chart Title"
+                />
 
-            <MyInput
-                value={chartAxis}
-                onChange={(e) => setChartAxis(e.target.value)}
-                id="chartAxis"
-                type="text"
-                placeholder="Data for axis 0x separated by commas"
-                onKeyDown={handleKeyDown}
-            />
+                <MyInput
+                    value={chartAxis}
+                    onChange={(e) => setChartAxis(e.target.value)}
+                    id="chartAxis"
+                    type="text"
+                    placeholder="Data for axis 0x separated by commas"
+                    onKeyDown={handleKeyDown}
+                />
 
-            <MyButton onClick={addNewLine}>Add line</MyButton>
+                <MyButton onClick={addNewLine}>Add line</MyButton>
 
-            {Array.from({ length: lineNow }).map((_, index) => (
-                <div key={index} style={{border: '2px solid #87CEFA', padding: 10, margin: 10}}>
-                    <h5 style={{textAlign: "center", marginBottom: 10, color: 'grey'}}>Line {index + 1}</h5>
-                    <MyInput
-                        value={seriesData[index]}
-                        // id={`seriesData${index}`}
-                        onChange={(e) => {
-                            const newData = [...seriesData];
-                            newData[index] = e.target.value;
-                            setSeriesData(newData);
-                        }}
-                        type="text"
-                        placeholder="Data for line separated by commas"
-                        onKeyDown={handleKeyDown}
-                    />
+                {Array.from({ length: lineNow }).map((_, index) => (
+                    <div key={index} style={{border: '2px solid #87CEFA', padding: 10, margin: 10}}>
+                        <h5 style={{textAlign: "center", marginBottom: 10, color: 'grey'}}>Line {index + 1}</h5>
+                        <MyInput
+                            value={seriesData[index]}
+                            // id={`seriesData${index}`}
+                            onChange={(e) => {
+                                const newData = [...seriesData];
+                                newData[index] = e.target.value;
+                                setSeriesData(newData);
+                            }}
+                            type="text"
+                            placeholder="Data for line separated by commas"
+                            onKeyDown={handleKeyDown}
+                        />
 
-                    <MySelect
-                        value={seriesColor[index]}
-                        onChange={(selectedColor) => {
-                            const newColors = [...seriesColor];
-                            newColors[index] = selectedColor;
-                            setSeriesColor(newColors);
-                        }}
-                        defaultValue="Choose a color"
-                        options={[
-                            {value: '#FFB6C1', name: 'Red'},
-                            {value: '#87CEFA', name: 'Blue'},
-                            {value: '#ffe975', name: 'Yellow'},
-                            {value: '#98FB98', name: 'Green'},
-                            {value: '#FFA07A', name: 'Orange'}
-                        ]}
-                    />
+                        <MySelect
+                            value={seriesColor[index]}
+                            onChange={(selectedColor) => {
+                                const newColors = [...seriesColor];
+                                newColors[index] = selectedColor;
+                                setSeriesColor(newColors);
+                            }}
+                            defaultValue="Choose a color"
+                            options={[
+                                {value: '#FFB6C1', name: 'Red'},
+                                {value: '#87CEFA', name: 'Blue'},
+                                {value: '#ffe975', name: 'Yellow'},
+                                {value: '#98FB98', name: 'Green'},
+                                {value: '#FFA07A', name: 'Orange'}
+                            ]}
+                        />
 
-                    <MySelect
-                        value={seriesArea[index]}
-                        onChange={(selectedArea) => {
-                            const newAreas = [...seriesArea];
-                            newAreas[index] = selectedArea;
-                            setSeriesArea(newAreas);
-                        }}
-                        defaultValue="fill area"
-                        options={[
-                            {value: true, name: 'fill area'},
-                            {value: false, name: 'just line'}
-                        ]}
-                    />
+                        <MySelect
+                            value={seriesArea[index]}
+                            onChange={(selectedArea) => {
+                                const newAreas = [...seriesArea];
+                                newAreas[index] = selectedArea === 'true'
+                                setSeriesArea(newAreas);
+                            }}
+                            // onChange={(selectedArea) => {
+                            //     const newAreas = [...seriesArea];
+                            //     newAreas[index] = selectedArea;
+                            //     setSeriesArea(selectedArea);
+                            // }}
+                            defaultValue={'Choose an option'}
+                            options={[
+                                {value: 'true', name: 'fill area'},
+                                {value: 'false', name: 'just line'}
+                            ]}
+                        />
 
-                    <MyButton onClick={deleteLine}>Delete line</MyButton>
-                </div>
-            ))}
-            <MyButton onClick={addNewChart}>{saveButtonText}</MyButton>
-        </form>
+                        <MyButton onClick={deleteLine}>Delete line</MyButton>
+                    </div>
+                ))}
+                <MyButton onClick={addNewChart}>{saveButtonText}</MyButton>
+            </form>
+        </div>
     );
 };
 
