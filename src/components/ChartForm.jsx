@@ -134,7 +134,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
 
     function handleKeyDown(event) {
         // Разрешаем вводить только цифры, запятые и точки
-        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.'];
+        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', 'Backspace', 'Delete'];
         if (!allowedKeys.includes(event.key)) {
             event.preventDefault();
         }
