@@ -11,7 +11,7 @@ In the "settings" path you can create a chart, edit an existing chart, or delete
 
 Charts are generated randomly, defined by the class: ChartsService.
 
-Testing video on local host you can watch hear: https://www.awesomescreenshot.com/video/27591401.
+Testing video on local host you can watch hear: https://www.awesomescreenshot.com/video/27591401?key=b01a56ce3f454af5dec41f6b6a5e3599.
 ## Available Scripts
 
 In the project directory, you can run:
