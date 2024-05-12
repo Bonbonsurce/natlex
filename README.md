@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Information about this project:
+
+This project is a test task from Natlex. The project is written using the React framework. The project includes two routes: “view-mode” for viewing charts and “settings” for editing charts.
+In the "view-mode" path, you can sort the charts by date (ascending and descending) using a drop-down list.
+
+In the "settings" path you can create a chart, edit an existing chart, or delete a chart. With each action, a model window opens with a form for editing or confirmation of deletion. After these steps, you can save the changes and return to the viewing page.
+
+Charts are generated randomly, defined by the class: ChartsService.
+
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -39,32 +49,48 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[//]: # ()
+[//]: # (## Learn More)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+[//]: # ()
+[//]: # (You can learn more in the [Create React App documentation]&#40;https://facebook.github.io/create-react-app/docs/getting-started&#41;.)
 
-### Code Splitting
+[//]: # ()
+[//]: # (To learn React, check out the [React documentation]&#40;https://reactjs.org/&#41;.)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+[//]: # ()
+[//]: # (### Code Splitting)
 
-### Analyzing the Bundle Size
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting]&#40;https://facebook.github.io/create-react-app/docs/code-splitting&#41;)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+[//]: # ()
+[//]: # (### Analyzing the Bundle Size)
 
-### Making a Progressive Web App
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size]&#40;https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size&#41;)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+[//]: # ()
+[//]: # (### Making a Progressive Web App)
 
-### Advanced Configuration
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app]&#40;https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app&#41;)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+[//]: # ()
+[//]: # (### Advanced Configuration)
 
-### Deployment
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration]&#40;https://facebook.github.io/create-react-app/docs/advanced-configuration&#41;)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+[//]: # ()
+[//]: # (### Deployment)
 
-### `npm run build` fails to minify
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment]&#40;https://facebook.github.io/create-react-app/docs/deployment&#41;)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[//]: # ()
+[//]: # (### `npm run build` fails to minify)
+
+[//]: # ()
+[//]: # (This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify]&#40;https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify&#41;)
