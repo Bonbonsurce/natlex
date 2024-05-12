@@ -59,7 +59,12 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
             return;
         }
 
-        const chartId = chartsCount + 1;
+        let chartId = chartsCount;
+
+        if (!editChart) {
+            chartId += 1;
+        }
+
         const chartAxisData = chartAxis.split(',').map(parseFloat);
         const currentDate = new Date();
         const chartDate = currentDate.toISOString();
