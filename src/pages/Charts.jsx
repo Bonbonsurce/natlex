@@ -1,13 +1,9 @@
 import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
-import { Line } from 'react-chartjs-2';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { LineChart } from '@mui/x-charts/LineChart';
-import ChartsService from "../API/ChartsService";
 import ChartList from "../components/UI/ChartList";
 import ChartsFilter from "../components/UI/ChartsFilter";
 import {useCharts} from "../hooks/useCharts";
-import {useFetching} from "../hooks/useFetching";
 import {SettingsContext} from "../context/context";
+import Loader from "../components/UI/Loader/Loader";
 
 const Charts = () => {
     const [charts, setCharts] = useState([]);
@@ -19,32 +15,24 @@ const Charts = () => {
     const [page, setPage] = useState(1);
     const lastElement = useRef();
 
-    const {isSettings, setIsSettings, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
-    //const chartsStat = ChartsService.generateCharts(10);
+    const {isSettings, setIsSettings, isLoading, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
 
-    // const [fetchCharts, isChartLoading, chartError] = useFetching( () => {
-    //     const chartsStat = ChartsService.generateCharts(10);
-    //     setCharts([...charts, chartsStat]);
-    // })
+    useEffect(() => {
+        setIsLoading(true);
+        setTimeout(async () => {
+            setCharts(await chartsStat);
+            setIsLoading(false);
+        }, 1000);
+    }, []);
 
-    const sortedCharts = useCharts(chartsStat, filter.sort);
-
-    // const createChart = (newChart) => {
-    //     setCharts([...charts, newChart])
-    //     setModal(false)
-    // }
-
-    // useEffect(() => {
-    //     fetchCharts()
-    // }, []);
-
-    // const removeChart = (chart) => {
-    //     setCharts(charts.filter(c => c.id !== chart.id))
-    // }
+    // const sortedCharts = useCharts(chartsStat, filter.sort);
+    const sortedCharts = useCharts(charts, filter.sort);
 
     return (
         <div className="center__items">
-
+            {isLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
+            }
             {sortedCharts.length > 0 &&
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
             }

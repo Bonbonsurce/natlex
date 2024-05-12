@@ -1,51 +1,36 @@
 import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
-import ChartsService from "../API/ChartsService";
 import ChartList from "../components/UI/ChartList";
-import ChartsFilter from "../components/UI/ChartsFilter";
-import {useCharts} from "../hooks/useCharts";
-import {useFetching} from "../hooks/useFetching";
 import MyModal from "../components/UI/MyModal/MyModal";
 import ChartForm from "../components/ChartForm";
 import MyButton from "../components/UI/button/MyButton";
 import {SettingsContext} from "../context/context";
 import {Link} from "react-router-dom";
+import Loader from "../components/UI/Loader/Loader";
 
 const Settings = () => {
     const [charts, setCharts] = useState([]);
     const [filter, setFilter] = useState({sort: ''});
     const [modal, setModal] = useState(false);
-    const {isSettings, setIsSettings, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
+    const {isSettings, setIsSettings, isLoading, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
 
     const [totalPages, setTotalPages] = useState(0);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const lastElement = useRef();
 
-    //const chartsStat = ChartsService.generateCharts(4);
-
-    // const [fetchCharts, isChartLoading, chartError] = useFetching( () => {
-    //     const chartsStat = ChartsService.generateCharts(10);
-    //     setCharts([...charts, chartsStat]);
-    // })
-
     useEffect(() => {
-        // Заполняем состояние charts при монтировании компонента
-        // const initialCharts = ChartsService.generateCharts(10);
-        // setCharts(initialCharts);
-        setCharts(chartsStat);
+        setIsLoading(true);
+        setTimeout(async () => {
+            setCharts(await chartsStat);
+            setIsLoading(false);
+        }, 1000);
     }, []);
-
-    const sortedCharts = useCharts(charts, filter.sort);
 
     const createChart = (newChart) => {
         setCharts([...charts, newChart]);
         //setChartsStat([...chartsStat, newChart]);
         setModal(false);
     }
-
-    // useEffect(() => {
-    //     fetchCharts()
-    // }, []);
 
     const removeChart = (chart) => {
         setCharts(charts => charts.filter(c => c.id !== chart.id));
@@ -57,43 +42,51 @@ const Settings = () => {
     }
 
     const editChart = (chart, newChart) => {
-        // Создаем новый массив графиков, в котором заменяем текущий график на новый
         const updatedCharts = charts.map(existingChart => {
-            // Если id текущего графика совпадает с id редактируемого графика, заменяем его
             if (existingChart.id === chart.id) {
-                return newChart; // Возвращаем новый график
+                return newChart;
             } else {
-                return existingChart; // Возвращаем неизмененный текущий график
+                return existingChart;
             }
         });
-        // Обновляем состояние charts новым массивом графиков
+
         setCharts(updatedCharts);
         setModal(false);
     }
 
     return (
         <div className="center__items">
+            {isLoading &&
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
+            }
             {charts.length === 0 ? (
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts do not exist</h1>
             ) : (
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
             )}
 
-            {isSettings &&
+            {charts.length === 0 ? (
                 <div className="btnCreateChart">
                     <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
                     <MyModal visible={modal} setVisible={setModal}>
-                        <ChartForm create={createChart} edit={editChart} chartsCount={chartsStat.length}/>
+                        <ChartForm create={createChart} edit={editChart} chartsCount={charts.length}/>
                     </MyModal>
                 </div>
-            }
-
-            <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart} edit={editChart}/>
-            {isSettings &&
-                <div className="btnCreateChart">
-                    <Link className='nav__link' to="/view-mode"  onClick={saveCharts}>Save changes</Link>
+            ) : (
+                <div>
+                    <div className="btnCreateChart">
+                        <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
+                        <MyModal visible={modal} setVisible={setModal}>
+                            <ChartForm create={createChart} edit={editChart} chartsCount={charts.length}/>
+                        </MyModal>
+                    </div>
+                    <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart}
+                               edit={editChart}/>
+                    <div className="btnCreateChart">
+                        <Link className='nav__link' to="/view-mode" onClick={saveCharts}>Save changes</Link>
+                    </div>
                 </div>
-            }
+            )}
         </div>
     );
 };

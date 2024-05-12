@@ -27,6 +27,7 @@ function App() {
         <SettingsContext.Provider value={{
             isSettings,
             setIsSettings: setIsSettings,
+            isLoading,
             setIsLoading: setIsLoading,
             chartsStat,
             setChartsStat: setChartsStat
