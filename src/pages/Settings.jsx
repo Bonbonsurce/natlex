@@ -18,13 +18,28 @@ const Settings = () => {
     const [page, setPage] = useState(1);
     const lastElement = useRef();
 
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     setTimeout(async () => {
+    //         setCharts(await chartsStat);
+    //         setIsLoading(false);
+    //     }, 1000);
+    // }, []);
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(async () => {
-            setCharts(await chartsStat);
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const loadedCharts = await chartsStat;
+                setCharts(loadedCharts);
+            } catch (error) {
+                console.error('Failed to load charts:', error);
+            }
             setIsLoading(false);
-        }, 1000);
-    }, []);
+            setIsSettings(true);
+        };
+
+        fetchData();
+    }, [chartsStat]);
 
     const createChart = (newChart) => {
         setCharts([...charts, newChart]);
@@ -60,14 +75,15 @@ const Settings = () => {
                 <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
             }
             {charts.length === 0 ? (
-                <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts do not exist</h1>
+                <h1 style={{textAlign: 'center', marginBottom: 30}}>{!isLoading && <p>Charts do not exist </p>}</h1>
             ) : (
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
             )}
 
             {charts.length === 0 ? (
                 <div className="btnCreateChart">
-                    <MyButton onClick={() => setModal(true)}>Create chart</MyButton>
+                    {!isLoading && <MyButton onClick={() => setModal(true)}>Create chart</MyButton>}
+
                     <MyModal visible={modal} setVisible={setModal}>
                         <ChartForm create={createChart} edit={editChart} chartsCount={charts.length}/>
                     </MyModal>

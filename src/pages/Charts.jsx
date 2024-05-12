@@ -17,16 +17,32 @@ const Charts = () => {
 
     const {isSettings, setIsSettings, isLoading, setIsLoading, chartsStat, setChartsStat} = useContext(SettingsContext);
 
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     setTimeout(async () => {
+    //         setCharts(await chartsStat);
+    //         setIsLoading(false);
+    //     }, 1000);
+    // }, []);
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(async () => {
-            setCharts(await chartsStat);
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const loadedCharts = await chartsStat;
+                setCharts(loadedCharts);
+            } catch (error) {
+                console.error('Failed to load charts:', error);
+            }
             setIsLoading(false);
-        }, 1000);
-    }, []);
+        };
+
+        fetchData();
+    }, [chartsStat]);
 
     // const sortedCharts = useCharts(chartsStat, filter.sort);
     const sortedCharts = useCharts(charts, filter.sort);
+
+    console.log(chartsStat, 'sorted-', sortedCharts);
 
     return (
         <div className="center__items">
@@ -39,7 +55,7 @@ const Charts = () => {
 
             {sortedCharts.length === 0 ? (
                 <h1 style={{textAlign: 'center'}}>
-                    Charts don't exist
+                    {!isLoading && <p>Charts do not exist </p>}
                 </h1>
             ) : (
                 <div>
