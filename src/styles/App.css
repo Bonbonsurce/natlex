@@ -30,6 +30,7 @@
     border: 2px solid #87CEEB;
     margin-bottom: 30px;
     z-index: 1;
+    width: 600px;
 }
 
 .navbar {
