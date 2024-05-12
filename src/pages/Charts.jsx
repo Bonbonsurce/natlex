@@ -42,8 +42,6 @@ const Charts = () => {
     // const sortedCharts = useCharts(chartsStat, filter.sort);
     const sortedCharts = useCharts(charts, filter.sort);
 
-    console.log(chartsStat, 'sorted-', sortedCharts);
-
     return (
         <div className="center__items">
             {isLoading &&

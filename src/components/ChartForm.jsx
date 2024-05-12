@@ -7,16 +7,19 @@ import {editableInputTypes} from "@testing-library/user-event/dist/utils";
 const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     const [chart, setChart] = useState({
         id: null,
-        xAxis: [],
-        series: [{data:[], color:'', area:false}],
+        chartType: '',
+        yAxis: '',
+        xAxis: [{ data: [] }],
+        series: [{ data: [], name: '', color: ''}],
         strDate: '',
         chartTitle: ''
     });
+
     const [lineNow, setLineNow] = useState(1);
     const [seriesData, setSeriesData] = useState(Array(lineNow).fill('1,2,3,4,5'));
     const [seriesName, setSeriesName] = useState(Array(lineNow).fill('Series'));
     const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill('blue'));
-    const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(''));
+    //const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(''));
     const [chartYAsix, setChartYAsix] = useState('Value');
     const [chartType, setChartType] = useState('line');
     const [chartTitle, setChartTitle] = useState('Example');
@@ -41,7 +44,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
             setSeriesData(editChart.series.map(serie => serie.data.join(',')));
             setSeriesColor(editChart.series.map(serie => serie.color));
             setSeriesName(editChart.series.map(serie => serie.name));
-            setSeriesArea(editChart.series.map(serie => serie.area));
+            //setSeriesArea(editChart.series.map(serie => serie.area));
             setLineNow(editChart.series.length);
             setSaveButtonText('Save changes');
         }
@@ -64,7 +67,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     const addNewChart = (e) => {
         e.preventDefault()
         if (!chartTitle || !chartYAsix || !chartAxis.length || seriesData.some(data => !data)) {
-            console.log('Поля не заполнены', chartAxis.length, '--',chartTitle);
+            console.log('Empty fields!', chartTitle, chartYAsix, chartAxis.length, seriesData.some(data => !data));
             return;
         }
 
@@ -86,12 +89,12 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                 return;
             }
 
-            const data = seriesData[index].split(',').map(parseFloat);
-
-            if (data.length !== chartAxisData.length) {
-                console.log('Not correct data!')
-                invalidData = true;
-            }
+            // const data = seriesData[index].split(',').map(parseFloat);
+            //
+            // if (data.length !== chartAxisData.length) {
+            //     console.log('Not correct data!')
+            //     invalidData = true;
+            // }
         });
 
         if (invalidData) {return;}
@@ -106,7 +109,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
             const newChart = {
                 id: chartId,
                 chartType: chartType,
-                yAxis: chartYAsix,
+                yTitle: chartYAsix,
                 xAxis: [{ data: chartAxisData }],
                 series: series,
                 strDate: chartDate,
@@ -115,28 +118,28 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
 
             if (editChart) {
                 edit(editChart, newChart);
-                setChart({
-                    id: null,
-                    xAxis: [],
-                    series: [{data:[], color:'', area:false}],
-                    strDate: '',
-                    chartTitle: ''
-                });
+                // setChart({
+                //     id: null,
+                //     xAxis: [],
+                //     series: [{data:[], color:'', area:false}],
+                //     strDate: '',
+                //     chartTitle: ''
+                // });
                 hideModal();
             } else {
                 create(newChart);
-                setChartTitle('');
-                setChartAxis('');
-                setSeriesData(Array(lineNow).fill(''));
-                setLineNow(1);
-
-                setChart({
-                    id: null,
-                    xAxis: [],
-                    series: [{data:[], color:'', area:false}],
-                    strDate: '',
-                    chartTitle: ''
-                });
+                // setChartTitle('');
+                // setChartAxis('');
+                // setSeriesData(Array(lineNow).fill(''));
+                // setLineNow(1);
+                //
+                // setChart({
+                //     id: null,
+                //     xAxis: [],
+                //     series: [{data:[], color:'', area:false}],
+                //     strDate: '',
+                //     chartTitle: ''
+                // });
             }
         }
     };
@@ -242,19 +245,19 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                             ]}
                         />
 
-                        <MySelect
-                            value={seriesArea[index]}
-                            onChange={(selectedArea) => {
-                                const newAreas = [...seriesArea];
-                                newAreas[index] = selectedArea === 'true'
-                                setSeriesArea(newAreas);
-                            }}
-                            defaultValue={'Choose an option'}
-                            options={[
-                                {value: 'true', name: 'fill area'},
-                                {value: 'false', name: 'just line'}
-                            ]}
-                        />
+                        {/*<MySelect*/}
+                        {/*    value={seriesArea[index]}*/}
+                        {/*    onChange={(selectedArea) => {*/}
+                        {/*        const newAreas = [...seriesArea];*/}
+                        {/*        newAreas[index] = selectedArea === 'true'*/}
+                        {/*        setSeriesArea(newAreas);*/}
+                        {/*    }}*/}
+                        {/*    defaultValue={'Choose an option'}*/}
+                        {/*    options={[*/}
+                        {/*        {value: 'true', name: 'fill area'},*/}
+                        {/*        {value: 'false', name: 'just line'}*/}
+                        {/*    ]}*/}
+                        {/*/>*/}
 
                         <MyButton onClick={deleteLine}>Delete line</MyButton>
                     </div>

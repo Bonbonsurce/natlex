@@ -42,7 +42,6 @@ const Settings = () => {
     }, [chartsStat]);
 
     const createChart = (newChart) => {
-        console.log(newChart);
         setCharts([...charts, newChart]);
         //setChartsStat([...chartsStat, newChart]);
         setModal(false);
