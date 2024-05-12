@@ -44,7 +44,7 @@ const ChartItem = (props) => {
     const options = {
         chart: {type: props.chart.chartType},
         title: {text: props.chart.chartTitle},
-        yAsix: {title: {text: props.chart.yTitle}},
+        yAxis: {title: {text: props.chart.yTitle}},
         series: props.chart.series,
         xAxis: {categories: months}
     }
@@ -69,7 +69,7 @@ const ChartItem = (props) => {
     //         data: [1, 2, 1, 4, 3, 6] // Данные для серии
     //     }
     // ]
-    const chartTypes = ['line','column', 'bar', 'area', 'pie','spline'];
+    //const chartTypes = ['line','column', 'bar', 'area', 'pie','spline'];
 
     return (
         <div className="chart-content">

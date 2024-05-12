@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import MyButton from "./UI/button/MyButton";
 import MyInput from "./UI/input/MyInput";
 import MySelect from "./UI/select/MySelect";
+import {editableInputTypes} from "@testing-library/user-event/dist/utils";
 
 const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
     const [chart, setChart] = useState({
@@ -12,10 +13,13 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
         chartTitle: ''
     });
     const [lineNow, setLineNow] = useState(1);
-    const [seriesData, setSeriesData] = useState(Array(lineNow).fill(''));
-    const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill(''));
+    const [seriesData, setSeriesData] = useState(Array(lineNow).fill('1,2,3,4,5'));
+    const [seriesName, setSeriesName] = useState(Array(lineNow).fill('Series'));
+    const [seriesColor, setSeriesColor] = useState(Array(lineNow).fill('blue'));
     const [seriesArea, setSeriesArea] = useState(Array(lineNow).fill(''));
-    const [chartTitle, setChartTitle] = useState('');
+    const [chartYAsix, setChartYAsix] = useState('Value');
+    const [chartType, setChartType] = useState('line');
+    const [chartTitle, setChartTitle] = useState('Example');
     const [chartAxis, setChartAxis] = useState([]);
     const [saveButtonText, setSaveButtonText] = useState('Create');
 
@@ -24,14 +28,19 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
             setChart({
                 id: editChart.id,
                 xAxis: [{ data: editChart.xAxis }],
+                chartType: editChart.chartType,
+                yTitle: editChart.yTitle,
                 series: editChart.series,
                 strDate: editChart.strDate,
                 chartTitle: editChart.chartTitle
             });
             setChartTitle(editChart.chartTitle);
+            setChartYAsix(editChart.yTitle);
+            setChartType(editChart.chartType)
             setChartAxis(editChart.xAxis.length > 0 ? editChart.xAxis[0].data.join(',') : '');
             setSeriesData(editChart.series.map(serie => serie.data.join(',')));
             setSeriesColor(editChart.series.map(serie => serie.color));
+            setSeriesName(editChart.series.map(serie => serie.name));
             setSeriesArea(editChart.series.map(serie => serie.area));
             setLineNow(editChart.series.length);
             setSaveButtonText('Save changes');
@@ -54,7 +63,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
 
     const addNewChart = (e) => {
         e.preventDefault()
-        if (!chartTitle || !chartAxis.length || seriesData.some(data => !data)) {
+        if (!chartTitle || !chartYAsix || !chartAxis.length || seriesData.some(data => !data)) {
             console.log('Поля не заполнены', chartAxis.length, '--',chartTitle);
             return;
         }
@@ -87,17 +96,17 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
 
         if (invalidData) {return;}
         else {
-            if(seriesArea[0] === 'false'){
-                console.log("dsds");
-            }
             const series = Array.from({ length: lineNow }).map((_, index) => ({
                 data: seriesData[index].split(',').map(parseFloat),
-                color: seriesColor[index],
-                area: seriesArea[index]
+                name: seriesName[index],
+                color: seriesColor[index]
+                // area: seriesArea[index]
             }));
 
             const newChart = {
                 id: chartId,
+                chartType: chartType,
+                yAxis: chartYAsix,
                 xAxis: [{ data: chartAxisData }],
                 series: series,
                 strDate: chartDate,
@@ -153,6 +162,30 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                     placeholder="Chart Title"
                 />
 
+                <MySelect
+                    value={chartType}
+                    onChange={(selectedType) => {
+                        setChartType(selectedType);
+                    }}
+                    defaultValue={'line'}
+                    options={[
+                        {value: 'line', name: 'line'},
+                        {value: 'column', name: 'column'},
+                        {value: 'bar', name: 'bar'},
+                        {value: 'area', name: 'area'},
+                        {value: 'pie', name: 'pie'},
+                        {value: 'spline', name: 'spline'},
+                    ]}
+                />
+
+                <MyInput
+                    value={chartYAsix}
+                    onChange={(e) => setChartYAsix(e.target.value)}
+                    id="chartYAsix"
+                    type="text"
+                    placeholder="Header for Y asix"
+                />
+
                 <MyInput
                     value={chartAxis}
                     onChange={(e) => setChartAxis(e.target.value)}
@@ -180,6 +213,18 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                             onKeyDown={handleKeyDown}
                         />
 
+                        <MyInput
+                            value={seriesName[index]}
+                            // id={`seriesData${index}`}
+                            onChange={(e) => {
+                                const newName = [...seriesName];
+                                newName[index] = e.target.value;
+                                setSeriesName(newName);
+                            }}
+                            type="text"
+                            placeholder="Series name"
+                        />
+
                         <MySelect
                             value={seriesColor[index]}
                             onChange={(selectedColor) => {
@@ -187,7 +232,7 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                                 newColors[index] = selectedColor;
                                 setSeriesColor(newColors);
                             }}
-                            defaultValue="Choose a color"
+                            defaultValue="Blue"
                             options={[
                                 {value: '#FFB6C1', name: 'Red'},
                                 {value: '#87CEFA', name: 'Blue'},
@@ -204,11 +249,6 @@ const ChartForm = ({create, edit, chartsCount, editChart, hideModal}) => {
                                 newAreas[index] = selectedArea === 'true'
                                 setSeriesArea(newAreas);
                             }}
-                            // onChange={(selectedArea) => {
-                            //     const newAreas = [...seriesArea];
-                            //     newAreas[index] = selectedArea;
-                            //     setSeriesArea(selectedArea);
-                            // }}
                             defaultValue={'Choose an option'}
                             options={[
                                 {value: 'true', name: 'fill area'},
