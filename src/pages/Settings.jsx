@@ -8,6 +8,7 @@ import MyModal from "../components/UI/MyModal/MyModal";
 import ChartForm from "../components/ChartForm";
 import MyButton from "../components/UI/button/MyButton";
 import {SettingsContext} from "../context/context";
+import {Link} from "react-router-dom";
 
 const Settings = () => {
     const [charts, setCharts] = useState([]);
@@ -37,8 +38,8 @@ const Settings = () => {
     const sortedCharts = useCharts(charts, filter.sort);
 
     const createChart = (newChart) => {
-        //setCharts([...charts, newChart]);
-        setChartsStat([...chartsStat, newChart]);
+        setCharts([...charts, newChart]);
+        //setChartsStat([...chartsStat, newChart]);
         setModal(false);
     }
 
@@ -48,8 +49,12 @@ const Settings = () => {
 
     const removeChart = (chart) => {
         setCharts(charts => charts.filter(c => c.id !== chart.id));
-        setChartsStat(chartsStat => chartsStat.filter(c => c.id !== chart.id));
     };
+
+    const saveCharts = () => {
+        setIsSettings(false);
+        setChartsStat(charts);
+    }
 
     const editChart = (chart, newChart) => {
         // Создаем новый массив графиков, в котором заменяем текущий график на новый
@@ -68,7 +73,7 @@ const Settings = () => {
 
     return (
         <div className="center__items">
-            {sortedCharts.length === 0 ? (
+            {charts.length === 0 ? (
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts do not exist</h1>
             ) : (
                 <h1 style={{textAlign: 'center', marginBottom: 30}}>Charts</h1>
@@ -83,10 +88,10 @@ const Settings = () => {
                 </div>
             }
 
-            <ChartList style={{paddingTop: 50}} charts={chartsStat} title='Charts' remove={removeChart} edit={editChart}/>
+            <ChartList style={{paddingTop: 50}} charts={charts} title='Charts' remove={removeChart} edit={editChart}/>
             {isSettings &&
                 <div className="btnCreateChart">
-                    <MyButton>Save</MyButton>
+                    <Link className='nav__link' to="/view-mode"  onClick={saveCharts}>Save changes</Link>
                 </div>
             }
         </div>
